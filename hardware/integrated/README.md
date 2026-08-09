@@ -29,15 +29,26 @@ status_led:
 1. Upload `production/gerber.zip`. 2 layers, 1.6mm, any colour; leave defaults.
 2. Enable **PCB Assembly**, assembled **both sides** (switches and passives are on the back).
 3. Upload `production/bom.csv` and `production/positions.csv`.
-4. In the part-placement review, sanity-check the rotations of **U1** (module), **U3**
-   (SOT-223), **U4** (QFN) and **J2** (USB-C) against the renders — JLCPCB's zero-rotation
-   convention differs from KiCad for some parts and their reviewer tool shows it clearly.
+4. In the part-placement review, check against `render_top.png` / `render_bottom.png`:
+   - **U1** antenna pointing at the bare band along the top edge. `positions.csv` already carries
+     a +270° correction for it (JLCPCB's library part has a different zero-orientation from the
+     KiCad footprint). If the preview shows it 180° out, change `ROT_FIX["U1"]` to `90` in
+     `jlc_cpl_fix.py`, re-run it and re-upload.
+   - **J2** opening flush with the right-hand edge, pins pointing inboard. No correction applied —
+     the build script asserts this orientation, so if the preview disagrees, stop and say so.
+   - **J1** pins on the five through-holes, body toward the bottom edge (its CPL entry is shifted
+     to the part centroid because the footprint anchor is pad 1).
+   - **U4** pin-1 dot against the silkscreen arrow, and on the bottom side **Q1/Q2** leads matching
+     their outlines — a 180° error on those two breaks the auto-reset circuit.
 5. J1 (the JST S05B-PASK-2) is through-hole: select "economic" assembly with THT if offered,
    or solder it by hand — it is the only through-hole part.
 
 ## Verification status
 
 - ERC: clean. DRC: 0 errors, 0 unconnected (KiCad 10, JLCPCB 2-layer rules).
+- `build_pcb.py` asserts the USB-C orientation (signal pins inboard of the shell posts, shell
+  reaching the board edge). Rev A had this backwards — the opening faced into the board — and the
+  error was invisible in the fab layers because KiCad ships no 3D model for this connector.
 - `verify_netlist.py` asserts the field-proven J1 pinout (1 TX / 2 GND / 3 +5V / 4 RX),
   shifter channel pairing, UART cross-connects, auto-reset topology and strapping pins;
   `--pcb` additionally diffs every PCB pad net against the schematic.

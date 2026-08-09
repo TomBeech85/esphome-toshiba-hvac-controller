@@ -47,7 +47,7 @@ PLACE = {
     "U3":  ("Package_TO_SOT_SMD", "SOT-223-3_TabPin2", 60.100, 75.600, 90, "F"),
     "U4":  ("Package_DFN_QFN", "QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm", 50.000, 64.500, 0, "F"),
     "J1":  (JST_LIB, "CONN_S05B-PASK-2_JST", 45.847, 74.353, 0, "F"),
-    "J2":  ("Connector_USB", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", 58.900, 64.700, 270, "F"),
+    "J2":  ("Connector_USB", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", 60.360, 64.700, 90, "F"),
     "D1":  ("Diode_SMD", "D_SOD-123", 37.600, 73.500, 90, "F"),   # AC 5V -> +5V
     "D2":  ("Diode_SMD", "D_SOD-123", 40.600, 73.500, 90, "F"),   # VBUS -> +5V
     "D3":  ("LED_SMD", "LED_0603_1608Metric", 40.500, 68.500, 90, "F"),
@@ -72,8 +72,8 @@ PLACE = {
     "C10": ("Capacitor_SMD", "C_0805_2012Metric", 60.600, 79.800, 270, "B"),   # U4 10u
     "R9":  ("Resistor_SMD", "R_0603_1608Metric", 48.600, 69.300, 0, "B"),    # VBUS div hi
     "R10": ("Resistor_SMD", "R_0603_1608Metric", 48.600, 71.050, 180, "B"),    # VBUS div lo
-    "R6":  ("Resistor_SMD", "R_0603_1608Metric", 59.900, 71.700, 90, "B"),   # CC1
-    "R7":  ("Resistor_SMD", "R_0603_1608Metric", 58.200, 71.700, 90, "B"),   # CC2
+    "R6":  ("Resistor_SMD", "R_0603_1608Metric", 59.200, 71.400, 0, "B"),    # CC1
+    "R7":  ("Resistor_SMD", "R_0603_1608Metric", 52.200, 70.400, 180, "B"),  # CC2
     "R8":  ("Resistor_SMD", "R_0603_1608Metric", 40.500, 68.500, 90, "B"),   # LED (mirrors D3)
     "C6":  ("Capacitor_SMD", "C_0603_1608Metric", 60.900, 75.500, 0, "B"),  # +3V3 100n
     "C12": ("Capacitor_SMD", "C_0805_2012Metric", 62.600, 78.000, 90, "B"),  # +3V3 22u
@@ -172,10 +172,30 @@ def build():
             net = netmap.get(key)
             if net:
                 pad.SetNet(nets[net])
+                if ref == "J2" and net == "GND":
+                    # Solid pour connection: at 0.5mm pitch there is no room for the two thermal
+                    # spokes DRC wants, and the USB shield/ground wants low impedance regardless.
+                    pad.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_FULL)
             elif pad.GetNumber():
                 unassigned.append(key)
 
     print(f"pads without nets (NC): {len(unassigned)}")
+
+    # ── USB-C orientation guard ────────────────────────────────────────────────────────────────
+    # The mating opening is on the face OPPOSITE the signal pins, so "pins inboard of the shell
+    # posts, shell posts hard against the east edge" is what makes the port usable. Getting this
+    # backwards is invisible in the fab layers (rev A shipped that way once), so assert it.
+    j2 = board.FindFootprintByReference("J2")
+    sig_x = [p.GetPosition().x / 1e6 for p in j2.Pads() if p.GetNumber() not in ("", "SH")]
+    shell_x = [p.GetPosition().x / 1e6 for p in j2.Pads() if p.GetNumber() == "SH"]
+    if not (max(sig_x) < min(shell_x)):
+        raise SystemExit("FATAL: J2 signal pins are not inboard of the shell posts - "
+                         "the USB-C opening faces into the board.")
+    if X1 - max(shell_x) > 3.0:
+        raise SystemExit(f"FATAL: J2 is {X1 - max(shell_x):.2f}mm from the east edge - "
+                         "the USB-C opening does not reach the board edge.")
+    print(f"J2 orientation OK: pins at x={max(sig_x):.2f}, shell to x={max(shell_x):.2f}, "
+          f"edge at x={X1:.2f}")
 
     # tracks and vias from routes.py
     import routes
