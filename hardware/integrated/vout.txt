@@ -1,0 +1,42 @@
+== J1 (JST PASK) mapping: the field-proven upstream pinout ==
+  ok: J1.1 = ESP_TX_5V
+  ok: J1.2 = GND
+  ok: J1.3 = +5V_AC (indoor unit 5V)
+  ok: J1.4 = ESP_RX_5V
+  ok: J1.5 = no connect
+== Level shifter pairing (A-side pin must pair with its own B-side channel) ==
+  ok: U2.B1 = ESP_TX_5V
+  ok: U2.B2 = ESP_RX_5V
+  ok: U2.A1 <-> U1.IO33 (firmware tx_pin GPIO33)
+  ok: U2.A2 <-> U1.IO32 (firmware rx_pin GPIO32)
+  ok: U2 VCCA=3V3, VCCB=5V (VCCA <= VCCB per TXS0108E datasheet)
+  ok: OE pulled up to 3V3 via R3 (upstream behaviour)
+== Power path ==
+  ok: D1: anode on AC 5V, cathode on +5V rail (no backfeed into the unit)
+  ok: D2: anode on USB VBUS, cathode on +5V rail
+  ok: AMS1117: VI on +5V, VO on +3V3
+  ok: WROOM VDD on +3V3
+== USB / programming ==
+  ok: USB D+ : J2 A6+B6 <-> CP2102N D+
+  ok: USB D- : J2 A7+B7 <-> CP2102N D-
+  ok: CC1/CC2 have 5.1k pulldowns (USB-C sink)
+  ok: UART cross-connect: CP RXD <- ESP TXD0
+  ok: UART cross-connect: CP TXD -> ESP RXD0
+  ok: CP2102N VBUS behind the R9/R10 divider
+== Auto-reset (DevKitC-V4 topology) ==
+  ok: Q1: C=EN, E=RTS, B<-10k<-DTR
+  ok: Q2: C=IO0, E=DTR, B<-10k<-RTS
+  ok: CP2102N drives DTR/RTS
+== Strapping / support ==
+  ok: EN: 10k pullup + 1uF RC + button
+  ok: IO0: 10k pullup + BOOT button
+  ok: IO12 (MTDI) unconnected -> 3.3V flash
+  ok: Status LED: IO2 -> 1k -> LED -> GND
+  ok: WROOM pad 1 grounded
+  ok: WROOM pad 15 grounded
+  ok: WROOM pad 38 grounded
+  ok: WROOM pad 39 grounded
+== PCB pad-net parity ==
+  checked 173 schematic nodes against 204 PCB pads, 59 mismatches
+
+59 FAILURES

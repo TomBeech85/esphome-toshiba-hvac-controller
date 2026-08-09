@@ -1,0 +1,267 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-08-09T04:39:18",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.5",
+    "schematic_parity": [],
+    "source": "toshiba_hvac_esp32_integrated.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment on Edge.Cuts",
+                    "pos": {
+                        "x": 64.007999,
+                        "y": 32.512
+                    },
+                    "uuid": "beebbf35-e1bc-4ce8-85e7-3b5b757a65e3"
+                },
+                {
+                    "description": "Reference field of J2",
+                    "pos": {
+                        "x": 64.545,
+                        "y": 64.7
+                    },
+                    "uuid": "1b95fb03-678d-4d41-a1b9-baac05489e40"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment on Edge.Cuts",
+                    "pos": {
+                        "x": 35.052,
+                        "y": 82.804
+                    },
+                    "uuid": "6e2d528f-83d7-4dd1-bc8b-f082fbd4ae2e"
+                },
+                {
+                    "description": "Reference field of D1",
+                    "pos": {
+                        "x": 35.6,
+                        "y": 73.5
+                    },
+                    "uuid": "97670265-f8a1-4461-9b2e-ef953a4d4b44"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of D2 on F.Silkscreen",
+                    "pos": {
+                        "x": 41.6,
+                        "y": 75.86
+                    },
+                    "uuid": "43134f58-78cc-4d52-854a-13aeb58dedba"
+                },
+                {
+                    "description": "Circle of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 41.9476,
+                        "y": 74.353
+                    },
+                    "uuid": "6212424d-3b7e-4abf-8ca2-a2a51711b3bb"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Reference field of U3",
+                    "pos": {
+                        "x": 55.6,
+                        "y": 75.6
+                    },
+                    "uuid": "7a1a863a-7500-45a2-9d54-1313d72adb84"
+                },
+                {
+                    "description": "Segment of J1 on F.Silkscreen",
+                    "pos": {
+                        "x": 55.9684,
+                        "y": 75.831534
+                    },
+                    "uuid": "8642408e-7b96-4c53-9e63-23da5697b891"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Reference field of U2",
+                    "pos": {
+                        "x": 41.5,
+                        "y": 58.7
+                    },
+                    "uuid": "59b3c74a-b941-4c63-8dd2-89fc01d44425"
+                },
+                {
+                    "description": "Segment of U1 on F.Silkscreen",
+                    "pos": {
+                        "x": 41.73,
+                        "y": 58.85
+                    },
+                    "uuid": "bea9d5cc-8af1-4b29-a370-c429c21201fa"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Reference field of D2",
+                    "pos": {
+                        "x": 38.6,
+                        "y": 73.5
+                    },
+                    "uuid": "61c388e7-0eb4-45dc-b0c7-8761a47e873e"
+                },
+                {
+                    "description": "Segment of D1 on F.Silkscreen",
+                    "pos": {
+                        "x": 38.6,
+                        "y": 75.86
+                    },
+                    "uuid": "ac8c094e-a77e-498f-9718-d6b31235d887"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clipped by solder mask",
+            "items": [
+                {
+                    "description": "Reference field of J1",
+                    "pos": {
+                        "x": 49.847,
+                        "y": 74.353
+                    },
+                    "uuid": "fb0fe816-b3a2-449a-a1ac-277455d4721c"
+                },
+                {
+                    "description": "PTH pad 3 [+5V_AC] of J1",
+                    "pos": {
+                        "x": 49.847,
+                        "y": 74.353
+                    },
+                    "uuid": "76a7c538-dd14-4383-b10d-2dec9eaac7eb"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_over_copper"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of SW2 on B.Silkscreen",
+                    "pos": {
+                        "x": 41.25,
+                        "y": 49.2
+                    },
+                    "uuid": "81997b47-37a9-4c57-94b9-5fcf02a178e6"
+                },
+                {
+                    "description": "Reference field of SW1",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 48.25
+                    },
+                    "uuid": "937a2efc-cfd2-4559-b554-98e088b29a71"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Reference field of SW1",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 48.25
+                    },
+                    "uuid": "937a2efc-cfd2-4559-b554-98e088b29a71"
+                },
+                {
+                    "description": "Segment of SW2 on B.Silkscreen",
+                    "pos": {
+                        "x": 38.2,
+                        "y": 48.75
+                    },
+                    "uuid": "a85b32c2-dd9c-4274-9c57-555322d32839"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        },
+        {
+            "description": "Silkscreen clearance",
+            "items": [
+                {
+                    "description": "Segment of SW2 on B.Silkscreen",
+                    "pos": {
+                        "x": 37.75,
+                        "y": 49.2
+                    },
+                    "uuid": "4712bf28-acf0-42a6-81cf-33f4d2ad0744"
+                },
+                {
+                    "description": "Reference field of SW1",
+                    "pos": {
+                        "x": 39.5,
+                        "y": 48.25
+                    },
+                    "uuid": "937a2efc-cfd2-4559-b554-98e088b29a71"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_overlap"
+        }
+    ]
+}

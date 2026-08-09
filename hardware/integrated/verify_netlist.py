@@ -126,20 +126,56 @@ def main():
         print("== PCB pad-net parity ==")
         txt = open(PCB, encoding="utf-8").read()
         pads = []
-        for fp in re.finditer(r'\(footprint\s+"[^"]+"(.*?)\n\t\)\n', txt, re.S):
-            block = fp.group(1)
+        i = 0
+        while True:
+            i = txt.find('(footprint', i)
+            if i < 0:
+                break
+            depth, j = 0, i
+            while True:
+                if txt[j] == '(':
+                    depth += 1
+                elif txt[j] == ')':
+                    depth -= 1
+                    if depth == 0:
+                        break
+                j += 1
+            block = txt[i:j + 1]
+            i = j + 1
             refm = re.search(r'\(property "Reference"\s+"([^"]+)"', block)
             if not refm:
                 continue
             ref = refm.group(1)
-            for pm in re.finditer(r'\(pad\s+"([^"]*)"[^()]*(?:\([^()]*\)[^()]*)*?\(net\s+\d+\s+"([^"]+)"\)', block):
-                pads.append((ref, pm.group(1), pm.group(2)))
+            k = 0
+            while True:
+                k = block.find('(pad ', k)
+                if k < 0:
+                    break
+                d2, m2 = 0, k
+                while True:
+                    if block[m2] == '(':
+                        d2 += 1
+                    elif block[m2] == ')':
+                        d2 -= 1
+                        if d2 == 0:
+                            break
+                    m2 += 1
+                pb = block[k:m2 + 1]
+                k = m2 + 1
+                num = re.match(r'\(pad\s+"([^"]*)"', pb).group(1)
+                netm = re.search(r'\(net\s+(?:\d+\s+)?"([^"]+)"\)', pb)
+                if netm:
+                    pads.append((ref, num, netm.group(1)))
         pcb_map = {}
         for ref, pin, net in pads:
             pcb_map.setdefault((ref, pin), set()).add(net)
         mismatches = 0
         for name, nodes in nets.items():
+            if name.startswith("unconnected-"):
+                continue
             for ref, pin in nodes:
+                if ref.startswith("PF"):
+                    continue  # PWR_FLAG symbols have no footprint by design
                 got = pcb_map.get((ref, pin))
                 if got is None:
                     failures.append(f"PCB missing pad {ref}.{pin} (schematic net {name})")
